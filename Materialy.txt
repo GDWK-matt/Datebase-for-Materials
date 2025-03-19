@@ -1,4 +1,6 @@
-3
-1	kamen	1000	100
-2	Poleno	250	1560
+5
+99	qwerty	5	88
+1	kamen	11	100
+5	polosko	33	4
 12	Derevo	100	1000
+2	toys	250	1560

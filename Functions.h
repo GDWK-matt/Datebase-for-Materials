@@ -3,35 +3,35 @@
 #include <string.h>
 #include <fstream>
 
-struct Contract {
-	int contractNumber;
-	char productName[50];
+struct Yacheika {
+	int Number;
+	char Name[50];
 	int quantity;
 	int pricePerUnit;
 
 
 	void printContract(std::ofstream& file) {
-		file << contractNumber << "\t"
-			<< productName << "\t"
+		file << Number << "\t"
+			<< Name << "\t"
 			<< quantity << "\t"
 			<< pricePerUnit << std::endl;
 	}
 
 	void readContract(std::ifstream& file) {
-		file >> contractNumber
-			>> productName
+		file >> Number
+			>> Name
 			>> quantity
 			>> pricePerUnit;
 	}
 };
-static Contract contract[20];
+static Yacheika contract[20];
 
-int numberOfContracts;
+int numberOfY;
 
 void saveContractsToFile(const char* filename) {
 	std::ofstream file(filename);
-	file << numberOfContracts << std::endl;
-	for (int i = 0; i < numberOfContracts; ++i) {
+	file << numberOfY << std::endl;
+	for (int i = 0; i < numberOfY; ++i) {
 		contract[i].printContract(file);
 	}
 	file.close();
@@ -39,8 +39,8 @@ void saveContractsToFile(const char* filename) {
 void loadContractsFromFile(const char* filename)
 {
 	std::ifstream file(filename);
-	file >> numberOfContracts;
-	for (int i = 0; i < numberOfContracts; ++i) {
+	file >> numberOfY;
+	for (int i = 0; i < numberOfY; ++i) {
 		contract[i].readContract(file);
 	}
 	file.close();
@@ -53,34 +53,29 @@ void enterContractInformation()
 	while (flag)
 	{
 		std::cout << "\n Kolichestvo yacheek: ";
-		std::cin >> numberOfContracts;
+		std::cin >> numberOfY;
 		if (std::cin.fail() || std::cin.peek() != '\n')
 		{
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\n_________________________________\n";
 			std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie  \n";
-			std::cout << "\n_________________________________\n";
 			continue;
 		}
 		else
 			flag = false;
 	}
-	for (int i = 0; i < numberOfContracts; i++)
+	for (int i = 0; i < numberOfY; i++)
 	{
 		bool flag = true;
 		while (flag)
 		{
 			std::cout << "\n Nomer " << i + 1 << " yacheiki: ";
-			std::cin >> contract[i].contractNumber;
+			std::cin >> contract[i].Number;
 			if (std::cin.fail() || std::cin.peek() != '\n')
 			{
 				std::cin.clear();
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				std::cout << "\n______________________________________________\n";
 				std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-				std::cout << "\n______________________________________________\n";
-
 				continue;
 			}
 			else
@@ -88,7 +83,7 @@ void enterContractInformation()
 
 		}
 		std::cout << "\n Nazvanie " << i + 1 << " yacheiki: ";;
-		std::cin >> contract[i].productName;
+		std::cin >> contract[i].Name;
 		flag = true;
 		while (flag)
 		{
@@ -98,10 +93,7 @@ void enterContractInformation()
 			{
 				std::cin.clear();
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				std::cout << "\n______________________________________________\n";
 				std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela)\n";
-				std::cout << "\n______________________________________________\n";
-
 				continue;
 			}
 			else
@@ -117,10 +109,7 @@ void enterContractInformation()
 			{
 				std::cin.clear();
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				std::cout << "\n______________________________________________\n";
 				std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-				std::cout << "\n______________________________________________\n";
-
 				continue;
 			}
 			else
@@ -135,9 +124,8 @@ void printContractInformation()
 	int i;
 	printf("\n");
 	printf("#\t%-20s\t%-10s\t%-10s\n", "Nazvanie", "Kolichestvo", "Cena za edinicy");
-	printf("*****************************************************************************\n");
-	for (i = 0; i < numberOfContracts; i++) {
-		printf("%d\t%-20s\t%-10d\t%-10d\n", contract[i].contractNumber, contract[i].productName,
+	for (i = 0; i < numberOfY; i++) {
+		printf("%d\t%-20s\t%-10d\t%-10d\n", contract[i].Number, contract[i].Name,
 			contract[i].quantity, contract[i].pricePerUnit);
 	}
 	printf("\n");
@@ -145,35 +133,91 @@ void printContractInformation()
 }
 void sortContractInformation()
 {
-	Contract temp;
-	for (int i = 0; i < numberOfContracts; i++)
+	std::cout << "\n Vibirite parametr sortirovki: ";
+	bool flag = true;
+	int choice;
+	while (flag)
 	{
-		for (int j = 0; j < numberOfContracts - i - 1; j++)
+		std::cout << "\n 1. Po nomery yacheiki";
+		std::cout << "\n 2. Po nazvaniu materiala";
+		std::cout << "\n 3. Po kolichestvu materiala\n";
+		std::cin >> choice;
+		if (std::cin.fail() || std::cin.peek() != '\n')
 		{
-			if (contract[j].contractNumber > contract[j + 1].contractNumber)
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "\nNevernoe znachenie\n";
+			continue;
+		}
+		else
+			flag = false;
+	}
+	switch (choice)
+	{
+	case 1:
+		Yacheika temp;
+		for (int i = 0; i < numberOfY; i++)
+		{
+			for (int j = 0; j < numberOfY - i - 1; j++)
 			{
-				temp = contract[j];
-				contract[j] = contract[j + 1];
-				contract[j + 1] = temp;
+				if (contract[j].Number > contract[j + 1].Number)
+				{
+					temp = contract[j];
+					contract[j] = contract[j + 1];
+					contract[j + 1] = temp;
+				}
 			}
 		}
+		saveContractsToFile("Materialy.txt");
+		break;
+	case 2: 
+		for (int i = 0; i < numberOfY - 1; i++) {
+			int minIndex = i;
+			for (int j = i + 1; j < numberOfY; j++) {
+			if (strcmp(contract[j].Name, contract[minIndex].Name) < 0) {
+						minIndex = j;
+					}
+			}
+			if (minIndex != i) {
+				Yacheika temp = contract[i];
+				contract[i] = contract[minIndex];
+				contract[minIndex] = temp;
+			}
+		}
+
+		saveContractsToFile("Materialy.txt");
+		break;
+	case 3:
+	{
+		for (int i = 1; i < numberOfY; i++) {
+			Yacheika key = contract[i];
+			int j = i - 1;
+
+			while (j >= 0 && contract[j].quantity > key.quantity) {
+				contract[j + 1] = contract[j];
+				j--;
+			}
+			contract[j + 1] = key;
+		}
+
+		saveContractsToFile("Materialy.txt");
 	}
-	saveContractsToFile("Materialy.txt");
+	break;
+	}
+	
 }
 void addContractInformation()
 {
 	bool flag = true;
 	while (flag)
 	{
-		std::cout << "\n Vvedite nomer " << numberOfContracts + 1 << " yacheiki: ";
-		std::cin >> contract[numberOfContracts].contractNumber;
+		std::cout << "\n Vvedite nomer " << numberOfY + 1 << " yacheiki: ";
+		std::cin >> contract[numberOfY].Number;
 		if (std::cin.fail() || std::cin.peek() != '\n')
 		{
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\n______________________________________________\n";
 			std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-			std::cout << "\n______________________________________________\n";
 
 			continue;
 		}
@@ -181,21 +225,18 @@ void addContractInformation()
 			flag = false;
 
 	}
-	std::cout << "\n Nazvanie " << numberOfContracts + 1 << " yacheiki: ";;
-	std::cin >> contract[numberOfContracts].productName;
+	std::cout << "\n Nazvanie " << numberOfY + 1 << " yacheiki: ";;
+	std::cin >> contract[numberOfY].Name;
 	flag = true;
 	while (flag)
 	{
 		std::cout << "\n Kolichestvo materiala: ";
-		std::cin >> contract[numberOfContracts].quantity;
+		std::cin >> contract[numberOfY].quantity;
 		if (std::cin.fail() || std::cin.peek() != '\n')
 		{
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\n______________________________________________\n";
 			std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-			std::cout << "\n______________________________________________\n";
-
 			continue;
 		}
 		else
@@ -206,14 +247,12 @@ void addContractInformation()
 	while (flag)
 	{
 		std::cout << "\n Cena za edinicy materiala: ";;
-		std::cin >> contract[numberOfContracts].pricePerUnit;
+		std::cin >> contract[numberOfY].pricePerUnit;
 		if (std::cin.fail())
 		{
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\n______________________________________________\n";
 			std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela)\n";
-			std::cout << "\n______________________________________________\n";
 
 			continue;
 		}
@@ -221,7 +260,7 @@ void addContractInformation()
 			flag = false;
 
 	}
-	numberOfContracts++;
+	numberOfY++;
 	saveContractsToFile("Materialy.txt");
 }
 void changeContractInformation()
@@ -236,9 +275,7 @@ void changeContractInformation()
 		{
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "\n______________________________________________\n";
 			std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela)\n";
-			std::cout << "\n______________________________________________\n";
 			continue;
 		}
 		else
@@ -246,9 +283,9 @@ void changeContractInformation()
 	}
 
 	int contractIndex = -1;
-	for (int i = 0; i < numberOfContracts; i++)
+	for (int i = 0; i < numberOfY; i++)
 	{
-		if (numberOfContractToChange == contract[i].contractNumber)
+		if (numberOfContractToChange == contract[i].Number)
 		{
 			contractIndex = i;
 		}
@@ -264,15 +301,13 @@ void changeContractInformation()
 		flag = true;
 		while (flag)
 		{
-			std::cout << "\n Vash vibor: ";
+			std::cout << "\n Vash vibor: \n";
 			std::cin >> choice;
 			if (std::cin.fail() || std::cin.peek() != '\n')
 			{
 				std::cin.clear();
 				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				std::cout << "\n__________________________________________________\n";
 				std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-				std::cout << "\n__________________________________________________\n";
 				continue;
 			}
 			else
@@ -284,7 +319,7 @@ void changeContractInformation()
 		case 1:
 		{
 			std::cout << "\n Novoe nazvanie yacheiki: ";
-			std::cin >> contract[contractIndex].productName;
+			std::cin >> contract[contractIndex].Name;
 			break;
 		}
 		break;
@@ -298,9 +333,7 @@ void changeContractInformation()
 					{
 						std::cin.clear();
 						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-						std::cout << "\n______________________________________________\n";
 						std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-						std::cout << "\n______________________________________________\n";
 
 						continue;
 					}
@@ -319,9 +352,7 @@ void changeContractInformation()
 					{
 						std::cin.clear();
 						std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-						std::cout << "\n______________________________________________\n";
 						std::cout << "\n Nevernoe znachenie. Vvedite chislovoe znachenie (bez probela) \n";
-						std::cout << "\n______________________________________________\n";
 
 						continue;
 					}
@@ -331,17 +362,13 @@ void changeContractInformation()
 			}
 			break;
 		default:
-			std::cout << "\n_________________________________\n";
 			std::cout << "\n Nevernoe znachenie\n";
-			std::cout << "\n_________________________________\n";
 			break;
 		}
 	}
 	else
 	{
-		std::cout << "\n_____________________________________________________\n";
 		std::cout << "\n Nevernoe znachenie. Net yacheiki s takim znacheniem\n";
-		std::cout << "\n_____________________________________________________\n";
 	}
 	saveContractsToFile("Materialy.txt");
 }
